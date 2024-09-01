@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  react-app:
+    build:
+      context: ./react-app
+      dockerfile: Dockerfile
+    container_name: react_app
+    ports:
+      - "3000:80"  # Map Apache's port 80 to host's port 3000
+    networks:
+      - app-network
+
+  apache:
+    build:
+      context: ./apache
+      dockerfile: Dockerfile
+    container_name: apache_server
+    ports:
+      - "8080:80"  # Optional: Map Apache's port 80 to host's port 8080
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+

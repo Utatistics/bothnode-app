@@ -1,0 +1,8 @@
+FROM httpd:2.4
+
+# Copy custom Apache configuration (optional)
+# COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+
+# Expose port 80
+EXPOSE 80
+
