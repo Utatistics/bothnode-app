@@ -1,8 +1,11 @@
+# Use an official Apache image as a base
 FROM httpd:2.4
 
-# Copy custom Apache configuration (optional)
-# COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+# Copy React app build files into Apache's web directory
+COPY ./build/ /usr/local/apache2/htdocs/
+
+# Copy custom Apache configuration file into the container
+COPY ./docker/httpd.conf /usr/local/apache2/conf/httpd.conf
 
 # Expose port 80
 EXPOSE 80
-
