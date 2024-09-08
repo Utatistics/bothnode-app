@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import TransactionTest from './TransactionTest';
+import SidebarLayout from './Layout';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <TransactionTest />
+        <SidebarLayout /> {/* Render SidebarLayout inside App */}
       </header>
     </div>
   );
