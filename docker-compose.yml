@@ -2,6 +2,7 @@
 version: '3'
 services:
   react-app:
+    container_name: react-app
     build:
       context: .
       dockerfile: docker/Dockerfile.reactapp
@@ -14,6 +15,7 @@ services:
       - "3000:3000"
 
   apache-server:
+    container_name: apache
     build:
       context: .
       dockerfile: docker/Dockerfile.apache
