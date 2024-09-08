@@ -1,0 +1,20 @@
+# Use an official Node.js image to build the React app
+FROM node:18-alpine AS build
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the package.json and package-lock.json first to install dependencies
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the app's source code
+COPY . .
+
+# Build the React app for production
+RUN npm run build
+
+# The final container does not need to run a web server, as this is a build container
+# The build output will be placed in the /app/build directory
