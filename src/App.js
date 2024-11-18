@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import SidebarLayout from './Layout';
+import SidebarLayout from './pages/Layout';
 
 function App() {
   return (

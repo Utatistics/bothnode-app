@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Typography, Drawer, List, ListItem, ListItemText, Box, Container, AppBar, Toolbar, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import TransactionTable from './TransactionTable'; // Import your TransactionTable component
+import TransactionTable from './TransactionTable';
+import DeploymentTable from './DeploymentTable';
 
 function SidebarLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedPage, setSelectedPage] = useState('Transactions');
+  const [selectedPage, setSelectedPage] = useState('Transactions'); // default tab
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -20,7 +21,11 @@ function SidebarLayout() {
     switch (selectedPage) {
       case 'Transactions':
         return <TransactionTable />;
-      // Add more cases here for other pages/components
+      case 'Deployment':
+        return <DeploymentTable />;
+      
+        // Add more cases here for other pages/components
+
       default:
         return <Typography>Select a page</Typography>;
     }
@@ -36,8 +41,7 @@ function SidebarLayout() {
             color="inherit"
             aria-label="menu"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}
-          >
+            sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -68,6 +72,13 @@ function SidebarLayout() {
           >
             <ListItemText primary="Transactions" />
           </ListItem>
+          <ListItem
+            button // Ensures ListItem acts as a button
+            onClick={() => handleMenuClick('Deployment')}
+            sx={{ cursor: 'pointer' }} // Ensures the item looks clickable
+          >
+            <ListItemText primary="Deployment" />
+          </ListItem>
           {/* Add more menu items here */}
         </List>
       </Drawer>
@@ -79,8 +90,7 @@ function SidebarLayout() {
           flexGrow: 1,
           bgcolor: 'background.default',
           p: 3,
-        }}
-      >
+        }}>
         <Container>
           {renderPage()}
         </Container>
