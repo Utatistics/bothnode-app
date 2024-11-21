@@ -4,16 +4,7 @@ import { Button, Container, Typography, Alert } from '@mui/material';
 import DataTable from './DataTable';
 import PayloadDialog from './PayloadDialog';
 
-const TablePage = ({ title, apiUrl, columns, dialogField}) => {
-
-  /**
-   * Defines the re-usable structure of table page that renders with the given props 
-   * @param {string} titile - the header of table
-   * @param {string} apiUrl - url for FastAPI endpoint of bothnode
-   * @param {Array<Object>} columns - defined columns to insert into the table
-   * @param {Array<string>} dialogField - The array of field names for triggering the dialog.
-   */
-
+const TablePage = ({ title, apiUrl, columns, dialogField }) => {
   const [rows, setRows] = useState([]);
   const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
@@ -29,12 +20,12 @@ const TablePage = ({ title, apiUrl, columns, dialogField}) => {
       })
       .then(data => setRows(data))
       .catch(error => setError(error.message));
-  }, [apiUrl]); // dependency: useEffect runs when `apiUrl` changes
+  }, [apiUrl]);
 
   const handleRowClick = (params) => {
     const fieldName = params.colDef.field;
     if (dialogField.includes(fieldName)) {
-      setSelectedPayload(params.row[fieldName]);  // Dynamically access the dialogField
+      setSelectedPayload(params.row[fieldName]);
       setOpenDialog(true);
     }
   };

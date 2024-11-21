@@ -1,102 +1,119 @@
-import React, { useState } from 'react';
-import { Typography, Drawer, List, ListItem, ListItemText, Box, Container, AppBar, Toolbar, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme } from '@mui/material/styles';
+
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+import { AppProvider } from '@toolpad/core/AppProvider';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { useDemoRouter } from '@toolpad/core/internal';
+
 import TransactionTable from './TransactionTable';
 import DeploymentTable from './DeploymentTable';
 
-function SidebarLayout() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedPage, setSelectedPage] = useState('Transactions'); // default tab
+// Define your navigation structure with icons for better clarity
+const NAVIGATION = [
+  {
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
+    kind: 'header',
+    title: 'Tables',
+  },
+  {
+    segment: 'transactions',
+    title: 'Transactions',
+    icon: <DashboardIcon />,
+  },
+  {
+    segment: 'deployment',
+    title: 'Deployment',
+    icon: <ShoppingCartIcon />,
+  },
+];
 
-  const handleMenuClick = (page) => {
-    setSelectedPage(page);
-    setDrawerOpen(false);
-  };
 
-  const renderPage = () => {
-    switch (selectedPage) {
-      case 'Transactions':
+// Define a refined theme for the dashboard
+const theme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data-toolpad-color-scheme',
+  },
+  colorSchemes: { light: true, dark: true },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
+
+function DashboardLayoutBasic(props) {
+  const { window } = props;
+  const router = useDemoRouter('/transactions'); // Start at the 'transactions' segment
+  const demoWindow = window !== undefined ? window() : undefined;
+
+  const renderContent = () => {
+    switch (router.pathname) {
+      case '/transactions':
         return <TransactionTable />;
-      case 'Deployment':
+      case '/deployment':
         return <DeploymentTable />;
-      
-        // Add more cases here for other pages/components
-
       default:
         return <Typography>Select a page</Typography>;
     }
   };
 
   return (
-    <Box sx={{ display: 'flex', bgcolor: 'white'}}>
-      {/* AppBar with MenuIcon */}
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            bothnode app
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <AppProvider
+      navigation={NAVIGATION}
+      branding={{
+        logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+        title: 'bothnode app',
+      }}
+      router={router}
+      theme={theme}
+      window={demoWindow}
+    >
+      
+      <DashboardLayout>
+        {/* Main Content Box with Improved Spacing and Centering */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',  // Optional for vertical centering
+            py: 4,
+            bgcolor: 'background.paper',
+            //mb: 2,
+            //mt: '32px',  // Offset for the fixed AppBar height (adjust according to your AppBar height)
+            width: '100%',  // Ensure the Box takes full width of the parent container
+            maxWidth: '100%',  // Prevents any content overflow
+          }}
+        >
+        </Box>
 
-      {/* Drawer */}
-      <Drawer
-        variant="temporary"
-        open={drawerOpen}
-        onClose={handleDrawerToggle}
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-          },
-        }}
-      >
-        <List>
-          <ListItem
-            button // Ensures ListItem acts as a button
-            onClick={() => handleMenuClick('Transactions')}
-            sx={{ cursor: 'pointer' }} // Ensures the item looks clickable
-          >
-            <ListItemText primary="Transactions" />
-          </ListItem>
-          <ListItem
-            button // Ensures ListItem acts as a button
-            onClick={() => handleMenuClick('Deployment')}
-            sx={{ cursor: 'pointer' }} // Ensures the item looks clickable
-          >
-            <ListItemText primary="Deployment" />
-          </ListItem>
-          {/* Add more menu items here */}
-        </List>
-      </Drawer>
 
-      {/* Main content area */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          bgcolor: 'background.default',
-          p: 3,
-        }}>
-        <Container>
-          {renderPage()}
-        </Container>
-      </Box>
-    </Box>
+        {/* Main content area with padding */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: 'background.default',
+            textAlign: 'center',
+            width: '100%',  // Ensure the Box takes full width of the parent container
+            maxWidth: '100%',  // Prevents any content overflow
+            p: 3,
+          }}
+        >
+          <Container>{renderContent()}</Container>
+        </Box>
+      </DashboardLayout>
+    </AppProvider>
   );
 }
 
-export default SidebarLayout;
+export default DashboardLayoutBasic;
